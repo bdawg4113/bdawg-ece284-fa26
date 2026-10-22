@@ -1,0 +1,7 @@
+software/data/
+software/result/
+software/logs/
+.venv/
+__pycache__/
+*.pyc
+software/run_training.sh
