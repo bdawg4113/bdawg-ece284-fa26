@@ -6,13 +6,13 @@ parameter bw = 4;
 parameter psum_bw = 16;
 
 output [psum_bw-1:0] out;
-input  [bw-1:0] a;
-input  [bw-1:0] b;
+input  [4*bw-1:0] a;
+input  [4*bw-1:0] b;
 input  [psum_bw-1:0] c;
 input  clk;
 
-reg    [bw-1:0] a_q;
-reg    [bw-1:0] b_q;
+reg    [4*bw-1:0] a_q;
+reg    [4*bw-1:0] b_q;
 reg    [psum_bw-1:0] c_q;
 
 mac #(.bw(bw), .psum_bw(psum_bw)) mac_instance (
@@ -22,10 +22,15 @@ mac #(.bw(bw), .psum_bw(psum_bw)) mac_instance (
 	.out(out)
 ); 
 
+
+
+// everything happens in 1 clock cycle, so keep 1 FF to store the bits. 
 always @ (posedge clk) begin
         b_q  <= b;
         a_q  <= a;
         c_q  <= c;
 end
+
+
 
 endmodule
