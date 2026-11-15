@@ -14,8 +14,15 @@ module mac_row (clk, out_s, in_w, in_n, valid, inst_w, reset);
   input  [psum_bw*col-1:0] in_n;
 
   wire  [(col+1)*bw-1:0] temp;
+  wire [2*(col+1)-1:0] inst_temp; // temporary bus instance, stores 2x temp since a mult requires 2x bits to store the product
+
+
 
   assign temp[bw-1:0]   = in_w;
+  assign inst_temp[1:0] = inst_w; //again, 1 - execute, 0 - kernel loading 
+
+
+
 
   genvar i;
   for (i=1; i < col+1 ; i=i+1) begin : col_num
@@ -24,10 +31,12 @@ module mac_row (clk, out_s, in_w, in_n, valid, inst_w, reset);
          .reset(reset),
 	 .in_w( temp[bw*i-1:bw*(i-1)]),
 	 .out_e(temp[bw*(i+1)-1:bw*i]),
-	 .inst_w(...),
-	 .inst_e(...),
-	 .in_n(...),
-	 .out_s(...));
+	 .inst_w(inst_temp[2*i-1:2*(i-1)]),
+	 .inst_e(inst_temp[2*(i+1)-1:2*i]),
+	 .in_n(in_n[psum_bw*i-1:psum_bw*(i-1)]),
+	 .out_s(out_s[psum_bw*i-1:psum_bw*(i-1)]));
+  
+    assign valid[i-1] = inst_temp[2*(i+1)-1];
   end
 
 endmodule
