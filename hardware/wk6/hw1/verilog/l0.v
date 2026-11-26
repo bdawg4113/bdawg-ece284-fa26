@@ -29,9 +29,11 @@ module l0 (clk, in, out, rd, wr, o_full, reset, o_ready);
 	 .rd_clk(clk),
 	 .wr_clk(clk),
 	 .rd(rd_en[i]),
-	 .wr(...),
-         .o_empty(...),
-         .o_full(...),
+	 .wr(//which one are you going to read?
+     ),
+         .o_empty(...), // my_empty[7:0] -- use boolean logic to show that if the rows are all empty, then you cannot read an empty cell 
+         .o_full(...),  // my_full[7:0] -- use boolean logic here because that indicates your fifo is full, you cannot write to these FIFOs 
+                        
 	 .in(...),
 	 .out(...),
          .reset(reset));
